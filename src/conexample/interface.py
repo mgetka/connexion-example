@@ -66,7 +66,7 @@ class Database(metaclass=ABCMeta):
         otherwise False."""
 
     @abstractmethod
-    def get_entries(self) -> Iterable[DatabaseEntry, ...]:
+    def get_entries(self) -> Iterable[DatabaseEntry]:
         """Returns all entries from the database."""
 
 
@@ -125,7 +125,7 @@ class Core(metaclass=ABCMeta):
         """If the entry does not exist raises CoreEntryNotFound exception."""
 
     @abstractmethod
-    def get_entries(self) -> Iterable[CoreEntry, ...]:
+    def get_entries(self) -> Iterable[CoreEntry]:
         """Returns all entries from the database."""
 
 
