@@ -1,0 +1,10 @@
+uwsgi:
+  socket: $(UWSGI_BIND)
+  protocol: uwsgi
+  processes: $(UWSGI_PROCESSES)
+  master: true
+  # Graceful shutdown on SIGTERM, see https://github.com/unbit/uwsgi/issues/849#issuecomment-118869386
+  hook-master-start: unix_signal:15 gracefully_kill_them_all
+  need-app: true
+  die-on-term: true
+  wsgi: conexample.wsgi.api:app
