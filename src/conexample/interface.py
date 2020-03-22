@@ -22,19 +22,11 @@ class DatabaseStorageUnavailable(DatabaseException):
     """Database storage engine is unavailable."""
 
 
-class DatabaseWriteFailed(DatabaseException):
-    """Failed to write database data."""
-
-
-class DatabaseReadFailed(DatabaseException):
-    """Failed to read database data."""
-
-
 class DatabaseInvalidRequest(DatabaseException):
     """Provided arguments are invalid."""
 
 
-class DatabaseEntryNotFound(DatabaseReadFailed):
+class DatabaseEntryNotFound(DatabaseException):
     """Requested entry doesn't exist."""
 
 
@@ -45,6 +37,7 @@ class DatabaseEntry:
     name: str
     rating: int
     created: datetime
+    modified: datetime
 
 
 class Database(metaclass=ABCMeta):

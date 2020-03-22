@@ -5,8 +5,12 @@ import tempfile
 import pytest
 import virtualenv
 from dotenv import dotenv_values
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 import conexample
+import conexample.db.sql.db
+import conexample.db.sql.models
 
 
 @pytest.fixture(scope="function")
@@ -62,3 +66,36 @@ def venv_call(venv, test_config):
         if not proc.poll():
             proc.terminate()
             proc.wait()
+
+
+@pytest.fixture(scope="function")
+def db_connection(test_config):
+    engine = conexample.db.sql.db.create_engine(
+        connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    conn = engine.connect()
+    conexample.db.sql.models.Base.metadata.create_all(engine)
+    yield conn
+    conexample.db.sql.models.Base.metadata.drop_all(engine)
+    conn.close()
+
+
+@pytest.fixture(scope="function")
+def db_session(db_connection):
+    transaction = db_connection.begin()
+    sess = conexample.db.sql.db.Session(bind=db_connection)
+    yield sess
+    sess.close()
+    conexample.db.sql.db.Session = sessionmaker()
+    transaction.rollback()
+
+
+@pytest.fixture(scope="function")
+def coupled_db_session(db_connection):
+    transaction = db_connection.begin()
+    conexample.db.sql.db.session_bind(db_connection)
+    sess = conexample.db.sql.db.Session()
+    yield sess
+    sess.close()
+    conexample.db.sql.db.Session = sessionmaker()
+    transaction.rollback()
