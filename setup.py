@@ -14,6 +14,9 @@ with open("requirements-dev.txt", "r") as f:
         filter(lambda line: not line.startswith("--"), f.read().splitlines())
     )
 
+with open("VERSION", "r") as f:
+    version = f.read().strip()
+
 with open("src/conexample/version.py", "w") as f:
     f.write(
         dedent(
@@ -21,15 +24,14 @@ with open("src/conexample/version.py", "w") as f:
             # pylint: disable=missing-docstring
             __version__ = "{version}"
             """.format(
-                version=os.environ.get("TRAVIS_TAG", "") or "0.0.0"
+                version=version
             )
         )
     )
 
 setup(
     name="conexample",
-    # Fallback to 0.0.0 for test builds,
-    version=os.environ.get("TRAVIS_TAG", "") or "0.0.0",
+    version=version,
     description="Example connexion application.",
     author="Michał Getka",
     author_email="michal.getka@gmail.pl",
