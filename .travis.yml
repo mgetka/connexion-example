@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.7"
+install:
+  - python setup.py develop
+  - pip install -e '.[dev]'
+script:
+  - isort -rc .
+  - black .
+  - git diff --exit-code # This fails if any changes were made by tooling
+  - pylint src/conexample
+  - pytest --cov=conexample --cov-report term-missing test
