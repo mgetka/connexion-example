@@ -1,0 +1,4 @@
+[report]
+omit=
+    # This file is actually tested, but pytest-cov cannot see due to execution in subprocess.
+    src/conexample/entrypoint.py

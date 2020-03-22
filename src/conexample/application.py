@@ -2,6 +2,9 @@
 import logging
 
 from . import SETTINGS, __version__
+from .core import ApplicationCore as Core
+from .db.sqlite import SQLiteDatabase as Db
+from .api.rest import RestApi as Api
 
 LOGGER = logging.getLogger(__package__)
 
@@ -39,13 +42,13 @@ class ConnexionExample:
         LOGGER.info("Starting conexample service.")
 
         LOGGER.info("Starting database interface")
-        self.database = NotImplemented
+        self.database = Db()
 
         LOGGER.info("Starting core logic.")
-        self.core = NotImplemented
+        self.core = Core(database=self.database)
 
         LOGGER.info("Starting API provider.")
-        self.api = NotImplemented
+        self.api = Api(core=self.core)
 
     def start(self):
         """Starts connexion example application developement server in a blocking manner"""
