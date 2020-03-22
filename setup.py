@@ -18,10 +18,10 @@ with open("src/conexample/version.py", "w") as f:
     f.write(
         dedent(
             """\
-    # pylint: disable=missing-docstring
-    __version__ = "{version}"
-    """.format(
-                version=os.environ.get("TRAVIS_TAG", "0.0.0")
+            # pylint: disable=missing-docstring
+            __version__ = "{version}"
+            """.format(
+                version=os.environ.get("TRAVIS_TAG", "") or "0.0.0"
             )
         )
     )
@@ -29,7 +29,7 @@ with open("src/conexample/version.py", "w") as f:
 setup(
     name="conexample",
     # Fallback to 0.0.0 for test builds,
-    version=os.environ.get("TRAVIS_TAG", "0.0.0"),
+    version=os.environ.get("TRAVIS_TAG", "") or "0.0.0",
     description="Example connexion application.",
     author="Michał Getka",
     author_email="michal.getka@gmail.pl",
