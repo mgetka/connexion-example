@@ -1,6 +1,8 @@
 import os
 import subprocess
 import tempfile
+from datetime import datetime
+from unittest.mock import create_autospec
 
 import pytest
 import virtualenv
@@ -99,3 +101,35 @@ def coupled_db_session(db_connection):
     sess.close()
     conexample.db.sql.db.Session = sessionmaker()
     transaction.rollback()
+
+
+@pytest.fixture(scope="function")
+def db():
+    mock = create_autospec(conexample.interface.Database, instance=True)
+    mock.get_entry.configure_mock(
+        return_value=conexample.interface.DatabaseEntry(
+            name="python",
+            rating=5,
+            created=datetime.utcnow(),
+            modified=datetime.utcnow(),
+        )
+    )
+    mock.set_entry_rating.configure_mock(return_value=True)
+    mock.delete_entry.configure_mock(return_value=True)
+    mock.get_entries.configure_mock(
+        return_value=[
+            conexample.interface.DatabaseEntry(
+                name="python",
+                rating=5,
+                created=datetime.utcnow(),
+                modified=datetime.utcnow(),
+            ),
+            conexample.interface.DatabaseEntry(
+                name="cassandra",
+                rating=1,
+                created=datetime.utcnow(),
+                modified=datetime.utcnow(),
+            ),
+        ]
+    )
+    return mock
