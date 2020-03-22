@@ -2,9 +2,9 @@
 import logging
 
 from . import SETTINGS, __version__
+from .api.rest import RestApi as Api
 from .core import ApplicationCore as Core
 from .db.sqlite import SQLiteDatabase as Db
-from .api.rest import RestApi as Api
 
 LOGGER = logging.getLogger(__package__)
 

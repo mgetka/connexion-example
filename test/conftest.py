@@ -1,6 +1,6 @@
+import os
 import subprocess
 import tempfile
-import os
 
 import pytest
 import virtualenv

@@ -1,9 +1,9 @@
+import logging
+import socket
+from multiprocessing import Process
 from textwrap import dedent
 from time import sleep
-import socket
-import logging
 from unittest.mock import patch
-from multiprocessing import Process
 
 import pytest
 
