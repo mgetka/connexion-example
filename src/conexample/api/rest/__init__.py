@@ -1,13 +1,13 @@
 """Flask & Connexion base REST API implementation"""
 import logging
-from functools import partial, wraps
 import os
+from functools import partial, wraps
 
 import connexion
 import connexion.utils
 from connexion.resolver import Resolver
 
-from ...interface import Api, CoreException, CoreInvalidRequest, CoreEntryNotFound
+from ...interface import Api, CoreEntryNotFound, CoreException, CoreInvalidRequest
 
 LOGGER = logging.getLogger("api.rest")
 OPERATION_ID_PREFIX = "conexample.api"
