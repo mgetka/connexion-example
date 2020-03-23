@@ -81,7 +81,7 @@ class RestApi(Api, connexion.FlaskApp):
                 """Implements conexample.api.entry.element.get"""
 
                 try:
-                    return handler.core.get_rating(name)
+                    return {"name": name, "rating": handler.core.get_rating(name)}
                 except CoreEntryNotFound:
                     return _make_response(404, "Entry not found", "Not found")
 
@@ -99,14 +99,11 @@ class RestApi(Api, connexion.FlaskApp):
 
                 if created:
                     return _make_response(
-                        201,
-                        "Entry created",
-                        "Created",
-                        {"Location": "entry/%s" % name},
+                        201, "Entry created", "Created", {"Location": "%s" % name},
                     )
 
                 return _make_response(
-                    200, "Entry updated", "OK", {"Location": "entry/%s" % name},
+                    200, "Entry updated", "OK", {"Location": "%s" % name},
                 )
 
             @staticmethod

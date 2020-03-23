@@ -11,6 +11,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import conexample
+import conexample.api.rest
+import conexample.core
 import conexample.db.sql.db
 import conexample.db.sql.models
 
@@ -133,3 +135,33 @@ def db():
         ]
     )
     return mock
+
+
+@pytest.fixture(scope="function")
+def core():
+    mock = create_autospec(conexample.interface.Core, instance=True)
+    mock.get_rating.configure_mock(return_value=5)
+    mock.set_entry_rating.configure_mock(return_value=True)
+    mock.get_entries.configure_mock(
+        return_value=[
+            conexample.interface.CoreEntry(name="python", rating=5,),
+            conexample.interface.CoreEntry(name="cassandra", rating=1,),
+        ]
+    )
+    return mock
+
+
+@pytest.fixture(scope="function")
+def api_client(core):
+    flask_app = conexample.api.rest.RestApi(core).app
+    with flask_app.test_client() as test_client:
+        yield test_client
+
+
+@pytest.fixture(scope="function")
+def stateful_api_client(test_config, coupled_db_session):
+    db = conexample.db.sql.SQLDatabase()
+    core = conexample.core.ApplicationCore(db)
+    flask_app = conexample.api.rest.RestApi(core).app
+    with flask_app.test_client() as test_client:
+        yield test_client
