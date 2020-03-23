@@ -59,6 +59,13 @@ class TestEntryRequests:
             response = api_client.post("/v1/entry", json=data)
             assert response.status_code == 400
 
+        def test_fails_for_core_invalid_request(self, api_client, core):
+            core.set_entry_rating.side_effect = conexample.interface.CoreInvalidRequest
+            response = api_client.post(
+                "/v1/entry", json={"name": "python", "rating": 5}
+            )
+            assert response.status_code == 400
+
         def test_error_propagation(self, api_client, core):
             core.set_entry_rating.side_effect = conexample.interface.CoreException
             response = api_client.post(
@@ -117,6 +124,11 @@ class TestEntryElementRequests:
             response = api_client.post("/v1/entry/python", json=data)
             assert response.status_code == 400
 
+        def test_fails_for_core_invalid_request(self, api_client, core):
+            core.set_entry_rating.side_effect = conexample.interface.CoreInvalidRequest
+            response = api_client.post("/v1/entry/python", json={"rating": 5})
+            assert response.status_code == 400
+
         def test_error_propagation(self, api_client, core):
             core.set_entry_rating.side_effect = conexample.interface.CoreException
             response = api_client.post("/v1/entry/python", json={"rating": 5})
@@ -136,3 +148,9 @@ class TestEntryElementRequests:
             core.delete_entry.side_effect = conexample.interface.CoreException
             response = api_client.delete("/v1/entry/python")
             assert response.status_code == 500
+
+
+def test_connexion_resolver_on_invalid_func_id(core):
+    api = conexample.api.rest.RestApi(core)
+    with pytest.raises(ImportError):
+        api.func_resolv("dummy.get")
