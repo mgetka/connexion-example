@@ -32,7 +32,7 @@ class TestIntegration:
             response = stateful_api_client.post("/v1/entry", json=entry)
             assert response.status_code == 201
 
-        # Step 2. User is very pleased to see that he's entries are stored
+        # Step 2. User is very pleased to see that his entries are stored
         response = stateful_api_client.get("/v1/entry")
         assert response.status_code == 200
         assert len(response.json) == len(entries)
@@ -46,7 +46,7 @@ class TestIntegration:
         response = stateful_api_client.post("/v1/entry/cassandra", json={"rating": 10})
         assert response.status_code == 400
 
-        # Step 5. Next morning, he's only concern is fighting hangover, since he sees that
+        # Step 5. Next morning, his only concern is fighting hangover, since he sees that
         # cassandra is still rated at 1
         response = stateful_api_client.get("/v1/entry/cassandra")
         assert response.status_code == 200
