@@ -55,7 +55,6 @@ class TestEntrypoints:
         finally:
             app.stop()
 
-    @pytest.mark.skip(reason="Not yet implemented")
     def test_entrypoint_exits_clearly(self, test_config):
 
         proc = Process(target=conexample.entrypoint.run_dev)
@@ -81,7 +80,6 @@ class TestEntrypoints:
         import conexample.wsgi.api
 
 
-@pytest.mark.skip(reason="Not yet implemented")
 class TestPackage:
     def test_dev_app_starts(self, venv_call, test_config):
 
