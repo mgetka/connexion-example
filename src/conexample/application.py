@@ -58,7 +58,7 @@ class ConnexionExample:
         LOGGER.warning(
             "Starting development server. DO NOT USE IN A PRODUCTION ENVIRONMENT!"
         )
-        # self.api.run()
+        self.api.run()
 
     def stop(self):  # pylint: disable=no-self-use
         """Stops the service"""

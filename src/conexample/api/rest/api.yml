@@ -1,0 +1,197 @@
+openapi: 3.0.2
+info:
+  title: conexample
+  version: "1"
+  description:
+    Simple API example for collecting and managing rated entries about programming languages,
+    libraries, databases and other IT related entities.
+  contact:
+    name: Maintainer
+    email: michal.getka@gmail.com
+servers:
+  - url: /v1
+paths:
+  /entry:
+    get:
+      summary: Get all entries
+      description: Return all entries stored in the database.
+      tags:
+        - entries
+      operationId: conexample.api.entry.get
+      responses:
+        200:
+          description: Return all entries.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: List of stored entries.
+                items:
+                  $ref: "#/components/schemas/Entry"
+              examples:
+                "Some results":
+                  description: Example with some returned values
+                  value:
+                    - name: python
+                      rating: 5
+                    - name: cassandra
+                      rating: 1
+                "No results":
+                  description: Example with no returned values
+                  value: []
+        500:
+          description: Something went wrong :(
+    post:
+      summary: Add or update an entry
+      description:
+        Adds new entry to the database. If an entry with the given name already exists, it will be
+        updated.
+      tags:
+        - entries
+      operationId: conexample.api.entry.post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Entry"
+            examples:
+              python:
+                value:
+                  name: python
+                  rating: 5
+              cassandra:
+                value:
+                  name: cassandra
+                  rating: 1
+      responses:
+        201:
+          description: Entry created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL to the created entry
+        200:
+          description: Entry updated
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL to the updated entry
+        400:
+          description: Provided entry is invalid
+        500:
+          description: Something went wrong :(
+  /entry/{name}:
+    parameters:
+      - schema:
+          type: string
+          minLength: 1
+        name: name
+        in: path
+        required: true
+        examples:
+          python:
+            value: python
+          cassandra:
+            value: cassandra
+    get:
+      summary: Get entry
+      description: Returns entry with the provided name. If such entry does not exists returns 404.
+      tags:
+        - entries
+      operationId: conexample.api.entry.element.get
+      responses:
+        200:
+          description: Entry found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entry"
+              examples:
+                python:
+                  value:
+                    name: python
+                    rating: 5
+                cassandra:
+                  value:
+                    name: cassandra
+                    rating: 1
+        404:
+          description: Entry not found
+        500:
+          description: Something went wrong :(
+    post:
+      summary: Add or update entry
+      description: Updates rating for the entry. If the entry does not exist yet it will be created.
+      tags:
+        - entries
+      operationId: conexample.api.entry.element.post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Entry attributes object
+              properties:
+                rating:
+                  type: integer
+                  description: Entry rating
+                  minimum: 0
+              required:
+                - rating
+            example:
+              rating: 5
+      responses:
+        201:
+          description: Entry created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Redirection to self
+        200:
+          description: Entry updated
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Redirection to self
+        400:
+          description: Provided entry is invalid
+        500:
+          description: Something went wrong :(
+    delete:
+      summary: Delete entry
+      description: Deletes entry. If the entry does not exist returns 404.
+      tags:
+        - entries
+      operationId: conexample.api.entry.element.delete
+      responses:
+        200:
+          description: Entry deleted
+        404:
+          description: Entry not found
+        500:
+          description: Something went wrong :(
+
+tags:
+  - name: entries
+    description: Operations related to the management of the collected entries.
+components:
+  schemas:
+    Entry:
+      type: object
+      description: Database entry representation
+      properties:
+        name:
+          type: string
+          description: Entry name
+          minLength: 1
+        rating:
+          type: integer
+          description: Entry rating
+          minimum: 0
+      required:
+        - name
+        - rating
