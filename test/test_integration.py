@@ -19,7 +19,54 @@ def _port_in_use(port):
 
 
 class TestIntegration:
-    pass
+    def test_entry_endpoints(self, stateful_api_client):
+
+        entries = [
+            {"name": "python", "rating": 5},
+            {"name": "flask", "rating": 4},
+            {"name": "cassandra", "rating": 1},
+        ]
+
+        # Step 1. Consumer adds some entries
+        for entry in entries:
+            response = stateful_api_client.post("/v1/entry", json=entry)
+            assert response.status_code == 201
+
+        # Step 2. User is very pleased to see that he's entries are stored
+        response = stateful_api_client.get("/v1/entry")
+        assert response.status_code == 200
+        assert len(response.json) == len(entries)
+
+        # Step 3. Then he changed his mind, and concludes that he doesn't like flask that much :/
+        response = stateful_api_client.post("/v1/entry/flask", json={"rating": 3})
+        assert response.status_code == 200
+
+        # Step 4. Later that night he got drunk and decided that he loves cassandra. But our system
+        # will not let anyone make such mistake!
+        response = stateful_api_client.post("/v1/entry/cassandra", json={"rating": 10})
+        assert response.status_code == 400
+
+        # Step 5. Next morning, he's only concern is fighting hangover, since he sees that
+        # cassandra is still rated at 1
+        response = stateful_api_client.get("/v1/entry/cassandra")
+        assert response.status_code == 200
+        assert response.json["rating"] == 1
+
+        # Step 6. Suddenly he found out that there are other NoSQL databases that he instantly
+        # wanted to rate!
+        response = stateful_api_client.post("/v1/entry/mongo", json={"rating": 4})
+        assert response.status_code == 201
+
+        # Step 7. After gaining some experience with NoSQL he decided that he no longer wants to
+        # know anything about this technology.
+        for entry in ("cassandra", "mongo"):
+            response = stateful_api_client.delete("/v1/entry/" + entry)
+            assert response.status_code == 200
+
+        # Step 8. He was especially mad about cassandra. Even though he deleted the entry moment
+        # before, he deleted it again. Just to be sure!
+        response = stateful_api_client.delete("/v1/entry/cassandra")
+        assert response.status_code == 404
 
 
 class TestEntrypoints:
