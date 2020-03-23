@@ -31,7 +31,7 @@ def request_context(func):
         except CoreException as ex:
             LOGGER.error("Internal error: %s", ex)
             return _make_response(
-                500, "Internal error occured: {}".format(ex), "Internal error",
+                500, "Internal error occured: {}".format(ex), "Internal error"
             )
 
     return wrapper
@@ -69,7 +69,7 @@ class RestApi(Api, connexion.FlaskApp):
                 )
 
             return _make_response(
-                200, "Entry updated", "OK", {"Location": "entry/%s" % body["name"]},
+                200, "Entry updated", "OK", {"Location": "entry/%s" % body["name"]}
             )
 
         class element:  # pylint: disable=invalid-name
@@ -99,11 +99,11 @@ class RestApi(Api, connexion.FlaskApp):
 
                 if created:
                     return _make_response(
-                        201, "Entry created", "Created", {"Location": "%s" % name},
+                        201, "Entry created", "Created", {"Location": "%s" % name}
                     )
 
                 return _make_response(
-                    200, "Entry updated", "OK", {"Location": "%s" % name},
+                    200, "Entry updated", "OK", {"Location": "%s" % name}
                 )
 
             @staticmethod
@@ -127,7 +127,7 @@ class RestApi(Api, connexion.FlaskApp):
         )
 
         self.add_api(
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "api.yml"),
+            os.path.join(os.path.dirname(__file__), "api.yml"),
             resolver=Resolver(self.func_resolv),
             strict_validation=True,
         )

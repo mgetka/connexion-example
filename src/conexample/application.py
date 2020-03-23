@@ -19,16 +19,16 @@ class ConnexionExample:
         self.api = None
 
         logging.basicConfig(format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-        root_loggger = logging.getLogger()
+        root_logger = logging.getLogger()
 
         try:
-            root_loggger.setLevel(SETTINGS["LOGGING_LEVEL"].upper())
+            root_logger.setLevel(SETTINGS["LOGGING_LEVEL"].upper())
         except ValueError:
             LOGGER.error(
                 "Failed to set logging level '%s'. Falling back to default INFO level.",
                 SETTINGS["LOGGING_LEVEL"],
             )
-            root_loggger.setLevel(logging.INFO)
+            root_logger.setLevel(logging.INFO)
 
         # Connexion, pls, shut up
         logging.getLogger("connexion").setLevel(logging.ERROR)
