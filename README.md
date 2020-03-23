@@ -1,4 +1,4 @@
-Example connexion application ![](https://travis-ci.com/mgetka/connexion-example.svg?branch=master) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+Example connexion application [![Build Status](https://travis-ci.com/mgetka/connexion-example.svg?branch=master)](https://travis-ci.com/mgetka/connexion-example) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ======================================
 
 This project serves as an example of [connexion](https://github.com/zalando/connexion) application.
