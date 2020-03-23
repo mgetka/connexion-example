@@ -1,6 +1,6 @@
 uwsgi:
   socket: $(UWSGI_BIND)
-  protocol: uwsgi
+  protocol: $(UWSGI_PROTOCOL)
   processes: $(UWSGI_PROCESSES)
   master: true
   # Graceful shutdown on SIGTERM, see https://github.com/unbit/uwsgi/issues/849#issuecomment-118869386

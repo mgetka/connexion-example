@@ -1,0 +1,24 @@
+version: "3"
+services:
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: dupa8
+  conexample:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_SQL_DATABASE_URI: postgresql://postgres:dupa8@db/postgres
+      UWSGI_BIND: 0.0.0.0:5000
+    networks:
+      - default
+      - host
+    ports:
+      - 5000:5000
+
+networks:
+  default:
+    internal: true
+  host:
+    driver: bridge

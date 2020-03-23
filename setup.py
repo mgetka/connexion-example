@@ -9,10 +9,13 @@ with open("requirements.txt", "r") as f:
         filter(lambda line: not line.startswith("--"), f.read().splitlines())
     )
 
-with open("requirements-dev.txt", "r") as f:
-    requirements_dev = list(
-        filter(lambda line: not line.startswith("--"), f.read().splitlines())
-    )
+try:
+    with open("requirements-dev.txt", "r") as f:
+        requirements_dev = list(
+            filter(lambda line: not line.startswith("--"), f.read().splitlines())
+        )
+except FileNotFoundError:
+    requirements_dev = []
 
 with open("VERSION", "r") as f:
     version = f.read().strip()
