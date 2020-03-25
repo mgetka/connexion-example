@@ -79,7 +79,7 @@ or with auto reloading
 ```
 
 In the production environment application should be run via WSGI server. The WSGI application object
-is located at `conexample.wsgi.api:app`. Example uWSGI configuration is provided in [uwsgi.yml](uwsgi.yml).
+is located at `conexample.wsgi.api.rest:app`. Example uWSGI configuration is provided in [uwsgi.yml](uwsgi.yml).
 
 ## Docker
 

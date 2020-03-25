@@ -1,5 +1,5 @@
 """example Connexion application WSGI application entrypoint"""
-from ..application import ConnexionExample
+from ...application import ConnexionExample
 
 # pylint: disable=invalid-name
 
