@@ -16,7 +16,7 @@ interfaces specified in [interfaces.py](src/conexample/interface.py) file.
 In connexion, `operationId`s defined in the OpenAPI document are mapped to endpoint callables defined in
 the project. In this application, custom mapper (or _resolver_ in the connexion nomenclature) is
 implemented. It maps structured `operationId`s onto static methods arranged in the nested classes
-structure. The implementation is contained [`api.rest`](src/conexample/api/rest/__init__.py) adapter
+structure. The implementation is contained in [`api.rest`](src/conexample/api/rest/__init__.py) adapter
 class.
 
 ## Configuration
