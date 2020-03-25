@@ -124,7 +124,7 @@ class TestEntrypoints:
                 pass
 
     def test_control_wsgi_entrypoint_syntax(self, test_config):
-        import conexample.wsgi.api
+        import conexample.wsgi.api.rest
 
 
 class TestPackage:
