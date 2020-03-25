@@ -8,6 +8,8 @@ services:
   conexample:
     build: .
     restart: unless-stopped
+    depends_on:
+      - db
     environment:
       DATABASE_SQL_DATABASE_URI: postgresql://postgres:dupa8@db/postgres
       UWSGI_BIND: 0.0.0.0:5000
