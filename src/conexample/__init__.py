@@ -1,5 +1,4 @@
 """Example Connexion application package"""
-import logging
 import sys
 from collections import defaultdict
 from os import environ, path
