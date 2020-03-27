@@ -1,3 +1,2 @@
 [messages control]
 disable=bad-continuation,duplicate-code
-extension-pkg-whitelist=ampiocloudtrust
