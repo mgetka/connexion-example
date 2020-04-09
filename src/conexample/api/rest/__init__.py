@@ -6,6 +6,7 @@ from functools import partial, wraps
 import connexion
 import connexion.utils
 from connexion.resolver import Resolver
+from werkzeug.exceptions import BadRequest, InternalServerError, NotFound
 
 from ...interface import Api, CoreEntryNotFound, CoreException, CoreInvalidRequest
 
@@ -30,9 +31,7 @@ def request_context(func):
             return func(*args, **kwargs)
         except CoreException as ex:
             LOGGER.error("Internal error: %s", ex)
-            return _make_response(
-                500, "Internal error occured: {}".format(ex), "Internal error"
-            )
+            raise InternalServerError(str(ex))
 
     return wrapper
 
@@ -58,7 +57,7 @@ class RestApi(Api, connexion.FlaskApp):
                     name=body["name"], rating=body["rating"]
                 )
             except CoreInvalidRequest as ex:
-                return _make_response(400, str(ex), "Bad request")
+                raise BadRequest(str(ex))
 
             if created:
                 return _make_response(
@@ -83,7 +82,7 @@ class RestApi(Api, connexion.FlaskApp):
                 try:
                     return {"name": name, "rating": handler.core.get_rating(name)}
                 except CoreEntryNotFound:
-                    return _make_response(404, "Entry not found", "Not found")
+                    raise NotFound("Entry not found")
 
             @staticmethod
             @request_context
@@ -95,7 +94,7 @@ class RestApi(Api, connexion.FlaskApp):
                         name=name, rating=body["rating"]
                     )
                 except CoreInvalidRequest as ex:
-                    return _make_response(400, str(ex), "Bad request")
+                    raise BadRequest(str(ex))
 
                 if created:
                     return _make_response(
@@ -114,7 +113,7 @@ class RestApi(Api, connexion.FlaskApp):
                 try:
                     handler.core.delete_entry(name)
                 except CoreEntryNotFound:
-                    return _make_response(404, "Entry not found", "Not found")
+                    raise NotFound("Entry not found")
 
                 return _make_response(200, "Entry deleted", "OK")
 
