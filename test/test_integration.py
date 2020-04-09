@@ -123,7 +123,7 @@ class TestEntrypoints:
             except AttributeError():
                 pass
 
-    def test_control_wsgi_entrypoint_syntax(self, test_config):
+    def test_wsgi_entrypoint_syntax(self, test_config):
         import conexample.wsgi.api.rest
 
 
